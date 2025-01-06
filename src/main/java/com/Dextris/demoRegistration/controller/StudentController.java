@@ -1,14 +1,16 @@
 package com.Dextris.demoRegistration.controller;
 
+import com.Dextris.demoRegistration.dto.CollegeDto;
 import com.Dextris.demoRegistration.dto.StudentForm;
+import com.Dextris.demoRegistration.entity.College;
 import com.Dextris.demoRegistration.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class StudentController {
@@ -30,7 +32,11 @@ public class StudentController {
             return  new ResponseEntity<>("Registration Failed",HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
-
-
     }
+
+    @GetMapping("/colleges/{state}")
+    public List<CollegeDto> getCollegesByState(@PathVariable String state) {
+        return studentService.findByState(state);
+    }
+
 }

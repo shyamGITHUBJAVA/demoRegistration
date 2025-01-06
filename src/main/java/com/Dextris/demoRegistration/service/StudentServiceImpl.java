@@ -1,21 +1,33 @@
 package com.Dextris.demoRegistration.service;
 
+import com.Dextris.demoRegistration.dto.CollegeDto;
+import com.Dextris.demoRegistration.entity.College;
 import com.Dextris.demoRegistration.entity.Student;
 import com.Dextris.demoRegistration.dto.StudentForm;
+import com.Dextris.demoRegistration.repo.CollegeRepository;
+import com.Dextris.demoRegistration.repo.StateRepository;
 import com.Dextris.demoRegistration.repo.StudentRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Random;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
 
-    private final StudentRepository studentRepository;
 
-    public StudentServiceImpl(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
-    }
+
+
+    @Autowired
+    private StateRepository stateRepository;
+    @Autowired
+    private CollegeRepository collegeRepository;
+    @Autowired
+    private StudentRepository studentRepository;
+
+
 
     @Override
     public boolean createUserAccount(StudentForm studentForm) {
@@ -62,6 +74,17 @@ public class StudentServiceImpl implements StudentService {
             return false;
         }
     }
+
+    public List<CollegeDto> findByState(String state){
+        List<College> colleges = collegeRepository.findByState(state);
+
+        // Map the colleges to CollegeDTOs containing only the name
+        return colleges.stream()
+                .map(college -> new CollegeDto(college.getCollegeName()))  // Convert College to CollegeDTO
+                .collect(Collectors.toList());
+    }
+
+
 
 //    private String generatePwd() {
 //        String upperalphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
